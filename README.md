@@ -13,7 +13,7 @@ Learn the basics of Terraform by creating:
 - SSH key pair for secure access
 - Basic AWS provider configuration
 
-[Go to Lab 1 Documentation](./lab1-ec2-ssh/README.md) | [View Configuration](./lab1-ec2-ssh/main.tf)
+[Go to Lab 1 Documentation](./lab1-ec2-ssh/README.md)
 
 ### Lab 2: EC2 with Variables and Outputs
 Learn how to make your Terraform code more flexible using:
@@ -37,13 +37,16 @@ Learn how to create and use Terraform modules to make your infrastructure code r
 
 ## Prerequisites
 
-Before starting the workshop, ensure you have:
+Before starting the workshop, ensure you have: 
 
 1. **AWS Account**: An AWS account with appropriate permissions
 2. **AWS CLI**: Installed and configured with your credentials
 3. **Terraform**: Version 1.0.0 or later installed
 4. **Git**: For cloning this repository
 5. **Text Editor**: VSCode, Sublime, or any preferred editor
+
+[Refer to the Configuration Documentation](./configuration.md)
+
 
 ## Getting Started
 
