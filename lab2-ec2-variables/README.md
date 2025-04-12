@@ -1,16 +1,16 @@
-# Lab 1: Basic EC2 Instance with Terraform
+# Lab 2: EC2 with Variables and Outputs
 
-This lab demonstrates how to create a basic EC2 instance using Terraform with SSH access.
+This lab demonstrates how to create an EC2 instance using Terraform with variables for better configuration management and reusability.
 
 ## Architecture Overview
 
 This lab will create:
-- A VPC (CIDR: 10.0.0.0/16)
-- A public subnet (CIDR: 10.0.1.0/24)
+- A VPC with configurable CIDR (default: 10.0.0.0/16)
+- A public subnet with configurable CIDR (default: 10.0.1.0/24)
 - An Internet Gateway
 - A Route Table for internet access
 - A Security Group allowing SSH access (port 22)
-- An EC2 instance (Amazon Linux 2023) with a public IP
+- An EC2 instance (Amazon Linux 2023) with configurable instance type
 - An SSH key pair for secure access
 
 ## Prerequisites
@@ -21,8 +21,10 @@ This lab will create:
 
 ## File Structure
 ```
-lab1-ec2-ssh/
+lab2-ec2-variables/
 ├── main.tf         # Main Terraform configuration
+├── variables.tf    # Variable definitions
+├── outputs.tf      # Output definitions
 └── README.md       # This documentation file
 ```
 
@@ -30,7 +32,7 @@ lab1-ec2-ssh/
 
 1. Navigate to the lab directory:
    ```bash
-   cd lab1-ec2-ssh
+   cd lab2-ec2-variables
    ```
 
 2. Generate SSH Key Pair:
@@ -61,32 +63,52 @@ lab1-ec2-ssh/
    # 7. Save the public key as "ssh_key.pub"
    ```
 
-3. Initialize Terraform:
+3. (Optional) Create terraform.tfvars file to customize your deployment:
+   ```hcl
+   aws_region = "us-east-1"
+   instance_type = "t2.micro"
+   vpc_cidr = "10.0.0.0/16"
+   subnet_cidr = "10.0.1.0/24"
+   availability_zone = "us-east-1a"
+   instance_name = "my-ec2-instance"
+   ```
+
+4. Initialize Terraform:
    ```bash
    terraform init
    ```
 
-4. Review the planned changes:
+5. Review the planned changes:
    ```bash
    terraform plan
    ```
 
-5. Apply the configuration:
+6. Apply the configuration:
    ```bash
    terraform apply
    ```
    Type 'yes' when prompted.
 
-6. After successful deployment, you'll see the public IP address in the output.
+7. After successful deployment, you'll see the outputs including:
+   - VPC ID
+   - Subnet ID
+   - Instance ID
+   - Public IP address
+   - Public DNS name
 
 ## Connecting to the EC2 Instance
 
 1. Use the SSH command with the generated key:
 
+   Using Public IP (from outputs):
    ```bash
    ssh -i ssh_key ec2-user@<PUBLIC_IP>
    ```
-   Replace `<PUBLIC_IP>` with the IP address shown in the Terraform output.
+
+   Using Public DNS (from outputs):
+   ```bash
+   ssh -i ssh_key ec2-user@<PUBLIC_DNS>
+   ```
 
 2. If you see a "Permission denied" error, ensure:
    - The key file has correct permissions (400)
@@ -107,14 +129,14 @@ Type 'yes' when prompted.
                                     AWS Cloud
 ┌──────────────────────────────────────────────────────────┐
 │                                                          │
-│   VPC (10.0.0.0/16)                                     │
+│   VPC (Configurable CIDR)                               │
 │   ┌────────────────────────────────────────────┐        │
 │   │                                            │        │
-│   │   Public Subnet (10.0.1.0/24)             │        │
+│   │   Public Subnet (Configurable CIDR)        │        │
 │   │   ┌─────────────────┐                      │        │
 │   │   │                 │                      │        │
 │   │   │  EC2 Instance   │ ◄──── SSH Access    │        │
-│   │   │  (t2.micro)     │        (Port 22)     │        │
+│   │   │(Variable Type)  │        (Port 22)     │        │
 │   │   └────────┬────────┘                      │        │
 │   │            │                               │        │
 │   │            ▼                               │        │
@@ -128,14 +150,14 @@ Type 'yes' when prompted.
 ## Resource Details
 
 1. **VPC**
-   - CIDR: 10.0.0.0/16
+   - CIDR: Configurable (default: 10.0.0.0/16)
    - DNS hostnames enabled
    - DNS support enabled
 
 2. **Public Subnet**
-   - CIDR: 10.0.1.0/24
+   - CIDR: Configurable (default: 10.0.1.0/24)
    - Auto-assign public IPs enabled
-   - Availability Zone: us-east-1a
+   - Configurable availability zone
 
 3. **Security Group**
    - Inbound: Allow SSH (port 22) from anywhere
@@ -143,9 +165,20 @@ Type 'yes' when prompted.
 
 4. **EC2 Instance**
    - AMI: Amazon Linux 2023
-   - Type: t2.micro
+   - Type: Configurable (default: t2.micro)
    - Public IP: Automatically assigned
    - Root volume: 8GB gp2
+
+## Available Variables
+
+| Variable Name | Description | Default Value |
+|--------------|-------------|---------------|
+| aws_region | AWS region | us-east-1 |
+| instance_type | EC2 instance type | t2.micro |
+| vpc_cidr | VPC CIDR block | 10.0.0.0/16 |
+| subnet_cidr | Subnet CIDR block | 10.0.1.0/24 |
+| availability_zone | AZ for the subnet | us-east-1a |
+| instance_name | Name tag for EC2 | terraform-lab2-instance |
 
 ## Important Notes
 
@@ -157,4 +190,9 @@ Type 'yes' when prompted.
 2. Costs:
    - This lab creates resources that may incur AWS charges
    - Remember to run `terraform destroy` when done
-   - The t2.micro instance is free-tier eligible 
+   - The t2.micro instance is free-tier eligible
+
+3. Variable Customization:
+   - Use terraform.tfvars for persistent variable values
+   - Use -var flag for one-time variable changes (e.g., `terraform apply -var="instance_type=t3.micro"`)
+   - Use environment variables (TF_VAR_variable_name) for sensitive data 
