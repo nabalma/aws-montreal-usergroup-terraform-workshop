@@ -13,7 +13,7 @@ Learn the basics of Terraform by creating:
 - SSH key pair for secure access
 - Basic AWS provider configuration
 
-[Go to Lab 1 Documentation](./lab1-ec2-ssh/README.md)
+[Go to Lab 1 Documentation](./lab1-ec2-ssh/README.md) | [View Configuration](./lab1-ec2-ssh/main.tf)
 
 ### Lab 2: EC2 with Variables and Outputs
 Learn how to make your Terraform code more flexible using:
