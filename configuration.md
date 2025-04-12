@@ -2,6 +2,8 @@
 
 ## 1. Install AWS CLI
 
+Please refer to the documentation: https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html
+
 ### For Windows:
 1. Download the AWS CLI MSI installer:
    - Visit: https://awscli.amazonaws.com/AWSCLIV2.msi
