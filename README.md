@@ -6,6 +6,25 @@ This repository contains the workshop materials for the AWS Montreal User Group'
 
 The workshop is divided into multiple labs, each focusing on different aspects of Terraform:
 
+### Lab 1: Basic EC2 Instance with SSH Access
+Learn the basics of Terraform by creating:
+- A simple EC2 instance
+- Security group for SSH access
+- SSH key pair for secure access
+- Basic AWS provider configuration
+
+[Go to Lab 1 Documentation](./lab1-ec2-ssh/README.md)
+
+### Lab 2: EC2 with Variables and Outputs
+Learn how to make your Terraform code more flexible using:
+- Input variables
+- Variable types and validation
+- Output values
+- Local values
+- Data sources
+
+[Go to Lab 2 Documentation](./lab2-ec2-variables/README.md)
+
 ### Lab 3: Terraform Modules
 Learn how to create and use Terraform modules to make your infrastructure code reusable and maintainable. This lab includes:
 - Creating a VPC module
