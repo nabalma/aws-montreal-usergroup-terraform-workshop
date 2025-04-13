@@ -88,11 +88,40 @@ resource "aws_security_group" "allow_ssh" {
 }
 
 # Create an EC2 instance
-resource "aws_instance" "web" {
-  ami           = "ami-0c7217cdde317cfec"  # Amazon Linux 2023 AMI
-  instance_type = var.instance_type
-  key_name      = aws_key_pair.ssh_key.key_name
 
+# Fetch the latest Amazon Linux 2023 AMI
+data "aws_ami" "amazon_linux_2023" {
+  most_recent = true
+  owners      = ["amazon"]
+
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023*-x86_64"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+
+
+# Launch an EC2 instance using the above AMI
+resource "aws_instance" "web" {
+  ami                         = data.aws_ami.amazon_linux_2023.id
+  instance_type               = var.instance_type
+  key_name                    = aws_key_pair.ssh_key.key_name
   subnet_id                   = aws_subnet.public.id
   vpc_security_group_ids      = [aws_security_group.allow_ssh.id]
   associate_public_ip_address = true
@@ -100,4 +129,4 @@ resource "aws_instance" "web" {
   tags = {
     Name = var.instance_name
   }
-} 
+}

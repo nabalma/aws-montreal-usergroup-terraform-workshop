@@ -41,10 +41,10 @@ Creates the compute infrastructure including:
 - `environment`: Environment name for resource tagging (default: "dev")
 - `vpc_cidr`: CIDR block for VPC (default: "10.0.0.0/16")
 - `subnet_cidr`: CIDR block for subnet (default: "10.0.1.0/24")
-- `availability_zone`: AZ for the subnet (default: "us-west-2a")
-- `ami_id`: AMI ID for EC2 instance (default: Amazon Linux 2 in us-west-2)
+- `availability_zone`: AZ for the subnet (default: "us-east-1a")
+- `ami_id`: AMI ID for EC2 instance (default: Amazon Linux 2023 in us-east-1)
 - `instance_type`: EC2 instance type (default: "t2.micro")
-- `public_key_path`: Path to your SSH public key (default: "~/.ssh/id_rsa.pub")
+- `public_key_path`: Path to your SSH public key (default: "./ssh_key.pub")
 
 ## Outputs
 
@@ -56,23 +56,60 @@ The configuration exposes several useful outputs:
 - `security_group_id`: ID of the created security group
 
 ## Usage
+1. Navigate to the lab directory:
+   ```bash
+   cd lab3-modules
+   ```
 
-1. Initialize Terraform:
+2. Generate SSH Key Pair:
+
+   ### For Linux/macOS:
+   ```bash
+   ssh-keygen -t rsa -b 2048 -f ssh_key -N ""
+   chmod 400 ssh_key
+   ```
+
+   ### For Windows (PowerShell):
+   ```powershell
+   # Option 1: Using ssh-keygen (Windows 10 build 1809 and later)
+   # Generate the SSH key
+   ssh-keygen -t rsa -b 2048 -f ssh_key -N '""'
+   
+   # Remove inheritance and set proper permissions
+   icacls ssh_key /inheritance:r
+   icacls ssh_key /grant:r $env:USERNAME`:R
+
+   # Option 2: Using PuTTYgen
+   # 1. Download PuTTYgen from: https://www.puttygen.com/
+   # 2. Open PuTTYgen
+   # 3. Set "Type of key to generate" to "RSA"
+   # 4. Set "Number of bits in a generated key" to "2048"
+   # 5. Click "Generate"
+   # 6. Save the private key as "ssh_key"
+   # 7. Save the public key as "ssh_key.pub"
+   ```
+
+3. Initialize Terraform:
 ```bash
 terraform init
 ```
 
-2. Review the changes:
+4. Generate and review an execution plan:
 ```bash
 terraform plan
 ```
 
-3. Apply the configuration:
+5. Apply the configuration:
 ```bash
 terraform apply
 ```
 
-4. To destroy the infrastructure:
+6. Once created, you can SSH into your instance:
+```bash
+ssh -i ./ssh_key ec2-user@<instance_public_ip>
+```
+
+7. To destroy the infrastructure:
 ```bash
 terraform destroy
 ```

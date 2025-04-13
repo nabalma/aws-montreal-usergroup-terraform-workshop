@@ -89,7 +89,7 @@ resource "aws_security_group" "allow_ssh" {
 
 # Create an EC2 instance
 resource "aws_instance" "web" {
-  ami           = "ami-0c7217cdde317cfec"  # Amazon Linux 2023 AMI
+  ami           = "ami-00a929b66ed6e0de6"  # Amazon Linux 2023 AMI
   instance_type = "t2.micro"
   key_name      = aws_key_pair.ssh_key.key_name
 

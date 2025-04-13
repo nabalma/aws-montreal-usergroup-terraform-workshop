@@ -1,7 +1,7 @@
 variable "environment" {
   description = "Environment name for tagging and naming resources"
   type        = string
-  default     = "dev"
+  default     = "terraform-lab3-dev"
 }
 
 variable "vpc_cidr" {
@@ -19,13 +19,13 @@ variable "subnet_cidr" {
 variable "availability_zone" {
   description = "Availability zone for the subnet"
   type        = string
-  default     = "us-west-2a"
+  default     = "us-east-1a"
 }
 
 variable "ami_id" {
   description = "ID of the AMI to use for the EC2 instance"
   type        = string
-  default     = "ami-0735c191cf914754d"  # Amazon Linux 2 in us-west-2
+  default     = "ami-00a929b66ed6e0de6"  # Amazon Linux 2023
 }
 
 variable "instance_type" {
@@ -37,5 +37,5 @@ variable "instance_type" {
 variable "public_key_path" {
   description = "Path to the public key file for SSH access"
   type        = string
-  default     = "~/.ssh/id_rsa.pub"
+  default     = "./ssh_key.pub"
 } 
